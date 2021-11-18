@@ -1,0 +1,3 @@
+那为什么要在数据库表字段中使用Snake Case下划线风格呢?
+因为大部分数据库服务器对象的命名是不分大小写的,因此使用Snake Case命名风格还是十分有必要的。
+MyBatis Generator考虑的还真是仔细,将Snake Case转换为Camel Case以与Java风格保持一致

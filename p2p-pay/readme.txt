@@ -1,0 +1,2 @@
+p2p-pay它属于一个支付接口工程，
+该工程使用了spring和springMVC框架。
