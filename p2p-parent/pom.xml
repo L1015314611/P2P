@@ -25,7 +25,7 @@
         <spring-data-redis-version>1.8.4.RELEASE</spring-data-redis-version>
         <jedis-versino>2.9.0</jedis-versino>
         <dubbo-version>2.6.0</dubbo-version>
-        <commons-lang3-version>3.4</commons-lang3-version>
+        <commons-lang3-version>3.8.1</commons-lang3-version>
         <jackson-version>2.7.3</jackson-version>
         <commons-io-version>2.5</commons-io-version>
         <httpclient-version>4.5.2</httpclient-version>
@@ -254,7 +254,7 @@
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <!-- 插件的版本 -->
-                <version>3.5.1</version>
+                <version>3.8.1</version>
                 <!-- 编译级别 -->
                 <configuration>
                     <source>1.8</source>

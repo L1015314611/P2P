@@ -1,6 +1,7 @@
 package com.bjpowernode.p2p.web;
 
 import com.bjpowernode.p2p.service.loan.LoanInfoService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class IndexController {
 
-    @AutoWired
+    @Autowired
     private LoanInfoService loanInfoService;
 
     @RequestMapping("/index")
@@ -35,6 +36,6 @@ public class IndexController {
         //获取散标产品
 
 
-        return "index";
+        return "test";
     }
 }

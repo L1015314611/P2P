@@ -250,4 +250,8 @@
       version = #{version,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="selectHistoryAverageRate" resultMap="java.lang.Double">
+    select cast(avg(rate) as decimal (10,2)) from b_loan_info
+  </select>
 </mapper>
