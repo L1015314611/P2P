@@ -6,15 +6,44 @@
             http://www.springframework.org/schema/beans/spring-beans.xsd
             http://code.alibabatech.com/schema/dubbo
             http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
     <!-- 服务提供者：应用名称 -->
-    <dubbo:application name="dataservice"/>
+    <!--name:配置应用名称,用于注册中心计算应用间依赖关系,注意:消费者和提供者名称不要一样,此参数不是匹配条件-->
+    <!--owner:应用负责人，用于服务治理请填写负责人公司邮箱前缀-->
+    <!--organization：组织名称(BU或部门),用于注册中心区分服务来源,此配置项建议不要使用autoconfig,直接写死在配置中-->
+    <dubbo:application name="dataservice" owner="dev0" organization="powernode"/>
 
     <!-- 配置zookeeper注册中心 -->
-    <!--<dubbo:registry protocol="zookeeper" address="192.168.74.128:2181"/>-->
-    <dubbo:registry protocol="zookeeper" address="localhost:2181"/>
+    <!--address:注册中心服务器地址,如果地址没有端口缺省为9090,同一集群内的多个地址用逗号分隔;不同集群的注册中心请配置多个<dubbo:register>标签-->
+    <!--timeout:注册中心请求超时时间(毫秒),缺省为5000-->
+    <!--集群配置方式-->
+    <!--<dubbo:registry protocol="zookeeper" address="192.168.74.128:2181,x.x.x.x:2181,x.x.x.x:2181" timeout="6000"/>-->
+    <!--<dubbo:registry protocol="zookeeper" address="192.168.74.128:2181" timeout="6000"/>-->
+    <dubbo:registry protocol="zookeeper" address="127.0.0.1:2181" timeout="6000"/>
+
+    <!--服务提供者缺省配置-->
+    <!--connections:对每个提供者的最大连接数,rmi,http,hessian等短连接协议表示限制连接数,dubbo等长链接协议表示建立的长链接个数-->
+    <!--retries:远程服务调用重试次数,不包括第一次调用,不需要重试请设为0-->
+    <!--timeout:远程服务调用超时时间(毫秒),缺省:1000,优先级: 单个>全局-->
+    <dubbo:provider connections="10" retries="0" timeout="180000"/>
+
+    <!--服务提供者协议配置-->
+    <!--name:协议名称-->
+    <!--serialization:协议序列化方式,当协议支持多种序列化方式是使用(dubbo协议缺省为hessian2,rmi协议缺省为java,http协议缺省为json)-->
+    <dubbo:protocol name="dubbo" port="20887" threads="200" serialization="hessian2"/>
+
+    <!--以下为服务提供者暴露服务配置-->
+    <!--标签bean:配置服务接口对应实现类(bean标签对应dubbo:service)-->
+    <!--id:spring容器管理的bean(服务接口实现类)的id-->
+    <!--class:spring容器管理的bean(服务接口实现类)的包路径-->
+    <!--interface:服务接口名-->
+    <!--ref:服务对象实现引用的id(id对应ref)-->
+
     <!--查询历史年化收益率服务-->
+    <!--@Service 服务层注解配置了bean-->
+    <!--<bean id="loanInfoServiceImpl" class="com.bjpowernode.p2p.service.loan.LoanInfoServiceImpl"/>-->
     <dubbo:service interface="com.bjpowernode.p2p.service.loan.LoanInfoService"
-                   ref="loanInfoServiceImpl" version="1.0.0" timeout="15000"></dubbo:service>
+                   ref="loanInfoServiceImpl" version="1.0.0" group="interface" timeout="15000"></dubbo:service>
 
 
 

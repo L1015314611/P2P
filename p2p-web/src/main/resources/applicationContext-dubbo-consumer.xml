@@ -6,14 +6,32 @@
             http://www.springframework.org/schema/beans/spring-beans.xsd
             http://code.alibabatech.com/schema/dubbo
             http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
-    <!-- 配置应用名称 -->
-    <dubbo:application name="p2p"/>
+
+    <!--name:配置应用名称,用于注册中心计算应用间依赖关系,注意:消费者和提供者名称不要一样,此参数不是匹配条件-->
+    <!--owner:应用负责人，用于服务治理请填写负责人公司邮箱前缀-->
+    <!--organization：组织名称(BU或部门),用于注册中心区分服务来源,此配置项建议不要使用autoconfig,直接写死在配置中-->
+    <dubbo:application name="p2p" owner="dev0" organization="powernode"/>
+
+    <dubbo:annotation package="com.bjpowernode.*"/>
+
     <!-- 配置注册中心 -->
-    <!--<dubbo:registry protocol="zookeeper" address="192.168.74.128:2181"/>-->
-    <dubbo:registry protocol="zookeeper" address="localhost:2181"/>
+    <!--address:注册中心服务器地址,如果地址没有端口缺省为9090,同一集群内的多个地址用逗号分隔;不同集群的注册中心请配置多个<dubbo:register>标签-->
+    <!--timeout:注册中心请求超时时间(毫秒),缺省为5000-->
+    <!--<dubbo:registry address="zookeeper://127.0.0.1:2181" timeout="6000"/>-->
+    <!--<dubbo:registry protocol="zookeeper" address="192.168.74.128:2181" timeout="6000"/>-->
+    <dubbo:registry protocol="zookeeper" address="127.0.0.1:2181" timeout="6000"/>
+
+    <!--服务请求超时时间,超时时间在服务提供方配置可能更好,单位毫秒-->
+    <dubbo:consumer connections="10" retries="0" timeout="180000"/>
+
+    <!--check:检查依赖的服务是否可用,默认true需要检查,不可用时抛出异常-->
+    <!--<dubbo:consumer check="false"/>-->
+    <!--以下为服务消费者引用服务配置-->
+    <!--id:服务引用BeanId-->
+    <!--interface:服务接口名-->
     <!--历史年化收益率-->
     <dubbo:reference id="loanInfoService" interface="com.bjpowernode.p2p.service.loan.LoanInfoService"
-                     version="1.0.0" check="false"></dubbo:reference>
+                     group="interface" version="1.0.0" check="false"></dubbo:reference>
 
 
 

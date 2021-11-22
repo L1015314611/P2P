@@ -1,33 +1,97 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration status="info">
+<configuration status="warn" monitorInterval="300">
+    <!--OFF>CUSTOMER>FATAL-->
+    <CustomLeveles>
+        <CustomerLevel name="CUSTOMER" intLevel="50"/>
+    </CustomLeveles>
+
     <!--先定义所有的appender-->
     <appenders>
-        <!--这个输出控制台的配置-->
+        <!--控制台输出-->
         <Console name="Console" target="SYSTEM_OUT">
             <!--控制台只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch）-->
             <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="ACCEPT"/>
             <!--这个都知道是输出日志的格式-->
-            <PatternLayout pattern="[p2p] %d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %class{36} %L %M - %msg%xEx%n"/>
+            <!--<PatternLayout pattern="[p2p] %d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %class{36} %L %M - %msg%xEx%n"/>-->
+            <PatternLayout pattern="%-5p %d{yyyy-MM-dd HH:mm:ss.SSS} [%X{uuid}] %.20c(%3L) : %m%n"/>
         </Console>
+
         <!--这个会打印出所有的信息，每次大小超过size，则这size大小的日志会自动存入按年份-月份建立的文件夹下面并进行压缩，作为存档-->
-        <RollingFile name="RollingFile" fileName="/opt/tomcat_licaihost/logs/app.log"
+        <!--<RollingFile name="RollingFile"
+                     fileName="/opt/tomcat_licaihost/logs/app.log"
                      filePattern="/opt/tomcat_licaihost/logs/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log.gz">
             <PatternLayout pattern="[p2p] %d{yyyy-MM-dd 'at' HH:mm:ss z} %-5level %class{36} %L %M - %msg%xEx%n"/>
             <SizeBasedTriggeringPolicy size="300MB"/>
         </RollingFile>
-        <RollingFile name="RollingFile2" fileName="F:/home/capapp/log/p2p-web.log"
+        <RollingFile name="RollingFile2"
+                     fileName="F:/home/capapp/log/p2p-web.log"
                      filePattern="F:/home/capapp/log/$${date:yyyy-MM}/p2p-web-%d{MM-dd-yyyy}-%i.log.gz">
             <PatternLayout pattern="[p2p] %d{yyyy-MM-dd 'at' HH:mm:ss z} %-5level %class{36} %L %M - %msg%xEx%n"/>
             <SizeBasedTriggeringPolicy size="300MB"/>
-        </RollingFile>
+        </RollingFile>-->
+
+        <!--目前生产使用-->
+        <RollingRandomAccessFile name="InfoFile"
+                                 fileName="../../log/p2p-web/system.log"
+                                 filePattern="../../log/p2p-web/system.log.%d{yyyy-MM-dd}.%i">
+            <Filters>
+                <ThresholdFilter level="customer" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="fatal" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="warn" onMatch="ACCEPT" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="debug" onMatch="ACCEPT" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="trace" onMatch="ACCEPT" onMismatch="NEUTRAL"/>
+            </Filters>
+            <PatternLayout pattern="%-5p %d{yyyy-MM-dd HH:mm:ss.SSS} [%X{uuid}] %.20c(%3L) : %m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="50MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="100"/>
+        </RollingRandomAccessFile>
+        <!--fatal级别可作为备用-->
+        <RollingRandomAccessFile name="FatalFile"
+                                 fileName="../../log/p2p-web/fatal.log"
+                                 filePattern="../../log/p2p-web/fatal.log.%d{yyyy-MM-dd}.%i">
+            <Filters>
+                <ThresholdFilter level="customer" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="fatal" onMatch="ACCEPT" onMismatch="DENY"/>
+                <ThresholdFilter level="error" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="warn" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="info" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="debug" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="trace" onMatch="DENY" onMismatch="NEUTRAL"/>
+            </Filters>
+            <PatternLayout pattern="%-5p %d{yyyy-MM-dd HH:mm:ss.SSS} [%X{uuid}] %.20c(%3L) : %m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="50MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="100"/>
+        </RollingRandomAccessFile>
     </appenders>
-    <!--然后定义logger，只有定义了logger并引入appender，appender才会生效-->
+
+    <!--然后定义logger，只有定义了logger并引入appender，appender才会生效,将所有输出记录到下面-->
     <loggers>
+        <!--控制第三方log级别-->
+        <logger name="RocketmqClient" level="warn"/>
+        <logger name="RocketmqRemoting" level="warn"/>
+        <logger name="org.apache" level="info"/>
+        <logger name="com.alibaba.dubbo" level="warn"/>
+        <logger name="org.springframework" level="info"/>
+        <!--可以指定具体的类的log,输出到某个文件-->
+        <!--<logger name="类路径" level="trace" additivity="false">
+            <AppenderRef ref="InfoFile"/>
+        </logger>-->
+
         <!--建立一个默认的root的logger-->
-        <root level="info">
+        <root level="trace">
             <appender-ref ref="Console"/>
             <!--<appender-ref ref="RollingFile"/>-->
-            <appender-ref ref="RollingFile2"/>
+            <!--<appender-ref ref="RollingFile2"/>-->
+            <appender-ref ref="InfoFile"/>
+            <appender-ref ref="FatalFile"/>
         </root>
     </loggers>
 </configuration>
