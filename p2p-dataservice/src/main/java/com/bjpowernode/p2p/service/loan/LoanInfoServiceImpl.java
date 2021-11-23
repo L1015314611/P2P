@@ -23,7 +23,10 @@ public class LoanInfoServiceImpl implements LoanInfoService {
         /*首先去redis缓存中查询，有：直接使用，没有：去数据库查询并存放到redis缓存中
         好处：提升系统的性能，提升用户的体验*/
         //首先redis缓存中获取该值
-        double historyAverageRate = (double) redisTemplate.opsForValue().get("historyAverageRate");
+        if(null == redisTemplate){
+            System.out.println("********************************************");
+        }
+        Double historyAverageRate = (Double) redisTemplate.opsForValue().get("historyAverageRate");
         if(true == ObjectUtils.isEmpty(historyAverageRate)){
             historyAverageRate = loanInfoMapper.selectHistoryAverageRate();
             redisTemplate.opsForValue().set("historyAverageRate",historyAverageRate,15, TimeUnit.MINUTES);

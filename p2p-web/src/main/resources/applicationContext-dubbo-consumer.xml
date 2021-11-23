@@ -18,11 +18,11 @@
     <!--address:注册中心服务器地址,如果地址没有端口缺省为9090,同一集群内的多个地址用逗号分隔;不同集群的注册中心请配置多个<dubbo:register>标签-->
     <!--timeout:注册中心请求超时时间(毫秒),缺省为5000-->
     <!--<dubbo:registry address="zookeeper://127.0.0.1:2181" timeout="6000"/>-->
-    <!--<dubbo:registry protocol="zookeeper" address="192.168.74.128:2181" timeout="6000"/>-->
-    <dubbo:registry protocol="zookeeper" address="127.0.0.1:2181" timeout="6000"/>
+    <dubbo:registry protocol="zookeeper" address="192.168.74.128:2181" timeout="6000"/>
+    <!--<dubbo:registry protocol="zookeeper" address="127.0.0.1:2181" timeout="6000"/>-->
 
     <!--服务请求超时时间,超时时间在服务提供方配置可能更好,单位毫秒-->
-    <dubbo:consumer connections="10" retries="0" timeout="180000"/>
+    <!--<dubbo:consumer connections="10" retries="0" timeout="180000"/>-->
 
     <!--check:检查依赖的服务是否可用,默认true需要检查,不可用时抛出异常-->
     <!--<dubbo:consumer check="false"/>-->

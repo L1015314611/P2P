@@ -53,5 +53,5 @@ public interface LoanInfoMapper {
     /**
      * 获取首页面的平台历史平均年化收益率
      * */
-    double selectHistoryAverageRate();
+    Double selectHistoryAverageRate();
 }

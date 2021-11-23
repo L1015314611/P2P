@@ -17,7 +17,7 @@ public class IndexController {
     @Autowired
     private LoanInfoService loanInfoService;
 
-    @RequestMapping("/index")
+    @RequestMapping(value = "/index")
     public String index(Model model){
 
         //获取平台历史平均年化收益率

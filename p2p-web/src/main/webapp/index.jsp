@@ -86,7 +86,7 @@
           <div class="index-exper-bottom">
                <ul class="list cf">
                    <li class="box1">
-                       <p class="text1">15.0<span>%</span></p>
+                       <p class="text1">${historyAverageRate}<span>%</span></p>
                        <p class="text2">历史年化收益率</p>
                    </li>
                    <li class="box2">

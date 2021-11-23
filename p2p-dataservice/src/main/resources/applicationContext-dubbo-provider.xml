@@ -18,8 +18,8 @@
     <!--timeout:注册中心请求超时时间(毫秒),缺省为5000-->
     <!--集群配置方式-->
     <!--<dubbo:registry protocol="zookeeper" address="192.168.74.128:2181,x.x.x.x:2181,x.x.x.x:2181" timeout="6000"/>-->
-    <!--<dubbo:registry protocol="zookeeper" address="192.168.74.128:2181" timeout="6000"/>-->
-    <dubbo:registry protocol="zookeeper" address="127.0.0.1:2181" timeout="6000"/>
+    <dubbo:registry protocol="zookeeper" address="192.168.74.128:2181" timeout="6000"/>
+    <!--<dubbo:registry protocol="zookeeper" address="127.0.0.1:2181" timeout="6000"/>-->
 
     <!--服务提供者缺省配置-->
     <!--connections:对每个提供者的最大连接数,rmi,http,hessian等短连接协议表示限制连接数,dubbo等长链接协议表示建立的长链接个数-->
@@ -30,7 +30,7 @@
     <!--服务提供者协议配置-->
     <!--name:协议名称-->
     <!--serialization:协议序列化方式,当协议支持多种序列化方式是使用(dubbo协议缺省为hessian2,rmi协议缺省为java,http协议缺省为json)-->
-    <dubbo:protocol name="dubbo" port="20887" threads="200" serialization="hessian2"/>
+    <!--<dubbo:protocol name="dubbo" port="20887" threads="200" serialization="hessian2"/>-->
 
     <!--以下为服务提供者暴露服务配置-->
     <!--标签bean:配置服务接口对应实现类(bean标签对应dubbo:service)-->
