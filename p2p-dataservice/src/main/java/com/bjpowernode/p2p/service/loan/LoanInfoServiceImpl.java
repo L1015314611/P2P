@@ -1,8 +1,10 @@
 package com.bjpowernode.p2p.service.loan;
 
+import com.bjpowernode.p2p.constant.Constants;
 import com.bjpowernode.p2p.mapper.loan.LoanInfoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
@@ -20,18 +22,32 @@ public class LoanInfoServiceImpl implements LoanInfoService {
     @Override
     public double queryHistoryAverageRate() {
 
+        //将redisTemplate模板对象存储的key的序列化方式修改为：StringRedisSerializer提高代码的可读性
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        redisTemplate.setValueSerializer(new StringRedisSerializer());
+
         /*首先去redis缓存中查询，有：直接使用，没有：去数据库查询并存放到redis缓存中
         好处：提升系统的性能，提升用户的体验*/
         //首先redis缓存中获取该值
-        if(null == redisTemplate){
-            System.out.println("********************************************");
-        }
-        Double historyAverageRate = (Double) redisTemplate.opsForValue().get("historyAverageRate");
+        /*Double historyAverageRate = (Double) redisTemplate.opsForValue().get(Constants.HISTORY_AVERAGE_RATE);
         if(true == ObjectUtils.isEmpty(historyAverageRate)){
             historyAverageRate = loanInfoMapper.selectHistoryAverageRate();
-            redisTemplate.opsForValue().set("historyAverageRate",historyAverageRate,15, TimeUnit.MINUTES);
-        }
+            redisTemplate.opsForValue().set(Constants.HISTORY_AVERAGE_RATE,historyAverageRate,15, TimeUnit.MINUTES);
+        }*/
 
+        /**以上代码在多线程高并发的时候会出现缓存穿透问题；
+         * 可以通过双重检测+同步代码块的方式解决
+         * */
+        Double historyAverageRate = (Double) redisTemplate.opsForValue().get(Constants.HISTORY_AVERAGE_RATE);
+        if(true == ObjectUtils.isEmpty(historyAverageRate)){
+            synchronized (this){
+                historyAverageRate = (Double) redisTemplate.opsForValue().get(Constants.HISTORY_AVERAGE_RATE);
+                if(true == ObjectUtils.isEmpty(historyAverageRate)){
+                    historyAverageRate = loanInfoMapper.selectHistoryAverageRate();
+                    redisTemplate.opsForValue().set(Constants.HISTORY_AVERAGE_RATE,historyAverageRate,15, TimeUnit.MINUTES);
+                }
+            }
+        }
         return historyAverageRate;
     }
 }

@@ -50,4 +50,6 @@ public interface UserMapper {
      * @mbggenerated Tue Nov 16 22:51:24 CST 2021
      */
     int updateByPrimaryKey(User record);
+    /**查询注册总人数*/
+    long selectAllUserCount();
 }

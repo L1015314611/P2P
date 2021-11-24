@@ -12,5 +12,7 @@
 </head>
 <body>
     <h1>历史年化收益率${historyAverageRate}</h1>
+    <h1>平台注册总人数${allUserCount}</h1>
+    <h1>平台投资总金额${totalBidMoney}</h1>
 </body>
 </html>

@@ -143,4 +143,15 @@
       bid_status = #{bidStatus,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <!--查询平台投资总金额-->
+  <select id="selectTotalBidMoney" resultType="java.lang.Double">
+    select sum(bid_money) from b_bid_info
+  </select>
+
+
+
+
+
+
 </mapper>
