@@ -2,6 +2,8 @@
 
 import com.bjpowernode.p2p.constant.Constants;
 import com.bjpowernode.p2p.mapper.loan.BidInfoMapper;
+import com.bjpowernode.p2p.mapper.loan.LoanInfoMapper;
+import com.bjpowernode.p2p.model.loan.BidInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.BoundValueOperations;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -9,6 +11,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -19,6 +22,8 @@ public class BidInfoServiceImpl implements BidInfoService{
 
     @Autowired
     private RedisTemplate<Object,Object> redisTemplate;
+    @Autowired
+    private LoanInfoMapper loanInfoMapper;
 
     @Override
     public Double queryTotalBidMoney() {
@@ -41,5 +46,10 @@ public class BidInfoServiceImpl implements BidInfoService{
             }
         }
         return totalBidMoney;
+    }
+
+    @Override
+    public List<BidInfo> queryBidInfoListByLoanId(Integer loanId) {
+        return bidInfoMapper.selectBidInfoListByLoanId(loanId);
     }
 }

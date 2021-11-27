@@ -1,6 +1,7 @@
 package com.bjpowernode.p2p.web;
 
 import com.bjpowernode.p2p.constant.Constants;
+import com.bjpowernode.p2p.model.loan.LoanInfo;
 import com.bjpowernode.p2p.service.loan.BidInfoService;
 import com.bjpowernode.p2p.service.loan.LoanInfoService;
 import com.bjpowernode.p2p.service.user.UserService;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -59,23 +61,27 @@ public class IndexController {
         //将以下查询看作是一个分页，但实际上他们不是一个分页
         //根据产品类型获取产品信息列表(产品类型，页码，每页显示条数)
         /**MyBatis中如果一个方法有多个参数，只能用Map或者对象传递*/
-        /**使用MySql中的limit    (pageNum-1)PageSize     */
+        /**使用MySql中的limit(起始下标, 截取长度)    [ (pageNum-1)*PageSize,pageSize ]     */
         Map<String,Object> paramMap = new HashMap<>();
         paramMap.put("currentPage",0);//页码
+
         //获取新手宝产品，产品类型为0，显示第1页，每页显示1个
         paramMap.put("productType",Constants.PRODUCT_TYPE_X);
-
-
+        List<LoanInfo> xloanInfolist = loanInfoService.queryLoanInfoListByProductType(paramMap);
+        model.addAttribute("xloanInfolist",xloanInfolist);
 
         //获取优选产品，产品类型为1，显示第1页，每页显示4个
-
-
+        paramMap.put("productType",Constants.PRODUCT_TYPE_U);
+        paramMap.put("pageSize",4);
+        List<LoanInfo> uLoanInfoList = loanInfoService.queryLoanInfoListByProductType(paramMap);
+        model.addAttribute("uLoanInfoList",uLoanInfoList);
 
         //获取散标产品，产品类型为2，显示第1页，每页显示8个
+        paramMap.put("productType",Constants.PRODUCT_TYPE_S);
+        paramMap.put("pageSize",8);
+        List<LoanInfo> sLoanInfoList = loanInfoService.queryLoanInfoListByProductType(paramMap);
+        model.addAttribute("sLoanInfoList",sLoanInfoList);
 
-
-
-
-        return "test";
+        return "index";
     }
 }

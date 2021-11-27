@@ -149,6 +149,21 @@
     select sum(bid_money) from b_bid_info
   </select>
 
+  <!--根据产品标识获取产品的所有投资记录（包含：用户的信息）-->
+  <select id="selectBidInfoListByLoanId" resultMap="BidUserBaseResultMap">
+    select
+      a.*,b.*
+    from
+      b_bid_info a
+        left join
+      u_user b
+      on
+        a.uid = b.id
+    where
+      a.loan_id = #{loanId}
+    order by
+      a.bid_time desc
+  </select>
 
 
 

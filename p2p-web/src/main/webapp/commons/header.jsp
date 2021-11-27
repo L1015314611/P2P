@@ -34,8 +34,8 @@ $(function(){
             <li>
             	<h2><a id="wytz" href="javascript:void(0)">我要投资<i></i></a></h2>
             	<div class="menu-drop" style="display:none;">
-	               <a href="loan/loan?ptype=1">优选类产品</a>
-	               <a href="loan/loan?ptype=2">散标类产品</a>
+	               <a href="${pageContext.request.contextPath}/loan/loan?ptype=1">优选类产品</a>
+	               <a href="${pageContext.request.contextPath}/loan/loan?ptype=2">散标类产品</a>
 	            </div>
             </li>
             <li><h2><a id="borrowers" href="javascript:void(0);" class="/loan/borrower">借款人信息<i></i></a></h2></li>

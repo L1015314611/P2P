@@ -2,12 +2,16 @@ package com.bjpowernode.p2p.service.loan;
 
 import com.bjpowernode.p2p.constant.Constants;
 import com.bjpowernode.p2p.mapper.loan.LoanInfoMapper;
+import com.bjpowernode.p2p.model.loan.LoanInfo;
+import com.bjpowernode.p2p.model.vo.PaginationVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @Service("loanInfoServiceImpl")
@@ -49,5 +53,28 @@ public class LoanInfoServiceImpl implements LoanInfoService {
             }
         }
         return historyAverageRate;
+    }
+
+    @Override
+    public List<LoanInfo> queryLoanInfoListByProductType(Map<String, Object> paramMap) {
+
+        return loanInfoMapper.queryLoanInfoListByProductType(paramMap);
+    }
+
+    @Override
+    public PaginationVO<LoanInfo> queryLoanInfoByPage(Map<String, Object> paramMap) {
+
+        PaginationVO<LoanInfo> paginationVO = new PaginationVO<>();
+        Long total = loanInfoMapper.selectTotal(paramMap);
+        paginationVO.setTotal(total);
+        List<LoanInfo> loanInfoList = loanInfoMapper.selectLoanInfoByPage(paramMap);
+        paginationVO.setDataList(loanInfoList);
+        return paginationVO;
+    }
+
+    @Override
+    public LoanInfo queryLoanInfoById(Integer id) {
+
+        return loanInfoMapper.selectByPrimaryKey(id);
     }
 }
